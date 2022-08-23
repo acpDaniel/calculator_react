@@ -25,17 +25,25 @@ function Painel() {
     if (tecla === "%") setContador(eval(contador) / 100);
 
     if (tecla === "+/-") {
-      if (typeof contador === "number") setContador((contador = contador * -1));
-      else {
-        if (contador.slice(-2)[0] === "-")
-          setContador(contador.replace(/..$/, "+" + contador.slice(-2) * -1));
-        else if (contador.slice(-2)[0] === "+")
-          setContador(contador.replace(/..$/, contador.slice(-2) * -1));
-        else if (contador.slice(-2)[0] === "*")
-          setContador(contador.replace(/.$/, contador.slice(-1) * -1));
-        else {
+      let regex = new RegExp("(.*\\D)(.*)");
+      let array = contador.toString().match(regex);
+      if (array != null) {
+        if (array.length <= 1) {
           setContador((contador = contador * -1));
+        } else {
+          if (array[2] !== null) {
+            if (array[1].slice(-1) === "-") {
+              array[1] = array[1].replace(/.$/, "+");
+            } else if (array[1].slice(-1) === "+") {
+              array[1] = array[1].replace(/.$/, "-");
+            } else {
+              array[2] = array[2] * -1;
+            }
+          }
         }
+        setContador(array.slice(1).join(""));
+      } else {
+        setContador((contador = contador * -1));
       }
     }
 
